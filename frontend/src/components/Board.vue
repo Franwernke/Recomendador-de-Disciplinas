@@ -1,8 +1,6 @@
 <template>
-  <v-container>
-    <div v-for="(discipline, index) in disciplines" :key="index">
-      <Card :discipline="discipline"/>
-    </div>
+  <v-container class="background">
+      <Card v-for="(discipline, index) in disciplines" :key="index" :discipline="discipline" @erase="erase"/>
   </v-container>
 </template>
 
@@ -15,6 +13,17 @@ export default {
   },
   components: {
     Card
+  },
+  methods: {
+    erase(discipline) {
+      this.$emit("erase", discipline);
+    }
   }
 }
 </script>
+
+<style scoped>
+.background {
+  background: white;
+}
+</style>
