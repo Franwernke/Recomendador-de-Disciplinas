@@ -12,11 +12,11 @@
 
 <script>
 export default {
-  data: () => ({
-    paths: [
-      { name: 'Home', url: '/' },
-      { name: 'Meu Painel', url: '/painel' },
-    ],
-  }),
+  props: {
+    paths: {
+      type: Array,
+      required: true,
+    },
+  },
 };
 </script>

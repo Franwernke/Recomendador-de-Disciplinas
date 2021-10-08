@@ -18,7 +18,7 @@
     </v-row>
 
     <v-row class="btn-row" justify="center" align="center">
-      <v-btn class="px-10 py-7 rounded-lg" color="#E7D2CC" depressed to="/start"
+      <v-btn class="px-10 py-7 rounded-lg" color="#E7D2CC" depressed to="/forms"
         >Começar</v-btn
       >
     </v-row>

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import Painel from '@/views/Painel.vue';
-import Start from '@/views/Start.vue';
+import Forms from '@/views/Forms.vue';
 
 Vue.use(VueRouter);
 
@@ -18,9 +18,9 @@ const routes = [
     component: Painel,
   },
   {
-    path: '/start',
-    name: 'Start',
-    component: Start,
+    path: '/forms',
+    name: 'Forms',
+    component: Forms,
   },
 ];
 

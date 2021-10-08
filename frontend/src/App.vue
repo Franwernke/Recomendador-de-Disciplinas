@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar :paths="paths" />
     <router-view />
   </v-app>
 </template>
@@ -10,6 +10,13 @@ import Navbar from '@/components/Navbar.vue';
 
 export default {
   components: { Navbar },
+  data: () => ({
+    paths: [
+      { name: 'Home', url: '/' },
+      { name: 'Meu Painel', url: '/painel' },
+      { name: 'Dados', url: '/forms' },
+    ],
+  }),
 };
 </script>
 
