@@ -1,11 +1,5 @@
 <template>
   <v-form ref="profileForm">
-    <v-row>
-      <v-col>
-        <h2 class="text-h6">Dados pessoais</h2>
-        <v-divider class="divider"></v-divider>
-      </v-col>
-    </v-row>
     <v-row class="px-10">
       <v-col>
         <v-text-field label="Nome" v-model="name" required clearable />

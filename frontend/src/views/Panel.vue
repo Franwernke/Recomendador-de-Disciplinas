@@ -43,6 +43,8 @@
               color="#FAF7B1"
               depressed
               width="50%"
+              link
+              to="edit/profile"
             >
               <v-icon left> mdi-pencil </v-icon>Editar Dados</v-btn
             >
@@ -51,6 +53,8 @@
               color="#FAF7B1"
               depressed
               width="50%"
+              link
+              to="edit/interests"
             >
               <v-icon left> mdi-pencil </v-icon>Editar Interesses</v-btn
             >

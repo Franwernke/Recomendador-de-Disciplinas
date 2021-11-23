@@ -8,13 +8,19 @@ export function getDataFromStorage(storage) {
   };
 }
 
-export function saveDataInStorage(storage, payload) {
+export default function saveDataInStorage(storage, payload, type = 'full') {
   const { userData, backendData } = payload;
-  const { isValid, errors } = validateFields(userData, backendData);
+  let { name, courseCode, disciplines, departments, keywords } = userData;
 
-  if (!isValid) return errors;
+  if (type === 'interests') {
+    name = JSON.parse(storage.getItem('name')) || '';
+    courseCode = JSON.parse(storage.getItem('courseCode')) || '';
+    disciplines = JSON.parse(storage.getItem('disciplines')) || [];
+  } else if (type === 'profile') {
+    departments = JSON.parse(storage.getItem('departments')) || [];
+    keywords = JSON.parse(storage.getItem('keywords')) || [];
+  }
 
-  const { name, courseCode, disciplines, departments, keywords } = userData;
   const { allDepartments, allDisciplines } = backendData;
 
   storage.clear();
@@ -39,30 +45,8 @@ export function saveDataInStorage(storage, payload) {
 function getFullObject(allObjects, selecteds) {
   return selecteds.map((selected) =>
     allObjects.find(({ code }) => {
-      const [inputCode, _] = selected.split('-');
+      const [inputCode] = selected.split('-');
       return inputCode.trim() == code;
     })
   );
-}
-
-function validateFields(userData, backendData) {
-  const { name, courseCode, departments, keywords } = userData;
-  const { allCoursesCode } = backendData;
-  const errors = [];
-
-  if (!name.trim()) errors.push('É necessário informar seu nome');
-
-  if (!allCoursesCode.find((code) => code === courseCode)) {
-    errors.push('Código do curso não existe');
-  }
-
-  if (departments.length === 0)
-    errors.push('É necessário informar ao menos um departamento de interesse');
-  if (keywords.length === 0)
-    errors.push('É necessário informar ao menos um tópico de interesse');
-
-  return {
-    isValid: errors.length === 0,
-    errors,
-  };
 }

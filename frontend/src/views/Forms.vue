@@ -14,11 +14,23 @@
       </v-col>
     </v-row>
     <v-form ref="form">
+      <v-row>
+        <v-col>
+          <h2 class="text-h6">Dados pessoais</h2>
+          <v-divider class="divider"></v-divider>
+        </v-col>
+      </v-row>
       <ProfileForm
         :allCoursesCode="allCoursesCode"
         :allDisciplines="allDisciplines"
         v-model="profileData"
       />
+      <v-row>
+        <v-col>
+          <h2 class="text-h6">Interesses</h2>
+          <v-divider class="divider"></v-divider>
+        </v-col>
+      </v-row>
       <InterestsForm :allDepartments="allDepartments" v-model="interestsData" />
     </v-form>
     <v-row justify="center">
@@ -34,7 +46,8 @@
 </template>
 
 <script>
-import { saveDataInStorage } from '@/services/Storage.js';
+import saveDataInStorage from '@/services/Storage.js';
+import validateFields from '@/services/Validate.js';
 import ProfileForm from '../components/ProfileForm.vue';
 import InterestsForm from '../components/InterestsForm.vue';
 
@@ -65,22 +78,29 @@ export default {
   },
   methods: {
     submit() {
-      const errors = saveDataInStorage(localStorage, {
-        userData: {
+      const { isValid, errors } = validateFields(
+        {
           ...this.profileData,
           ...this.interestsData,
         },
-        backendData: {
-          allCoursesCode: this.allCoursesCode,
-          allDepartments: this.allDepartments,
-          allDisciplines: this.allDisciplines,
-        },
-      });
-
-      if (errors.length === 0) {
+        this.allCoursesCode
+      );
+      if (isValid) {
+        saveDataInStorage(localStorage, {
+          userData: {
+            ...this.profileData,
+            ...this.interestsData,
+          },
+          backendData: {
+            allCoursesCode: this.allCoursesCode,
+            allDepartments: this.allDepartments,
+            allDisciplines: this.allDisciplines,
+          },
+        });
         this.$router.push('/panel');
+      } else {
+        this.errors = errors;
       }
-      this.errors = errors;
     },
     async getAllDisciplines() {
       const url = process.env.BACKEND_URL || 'http://localhost:8080';
