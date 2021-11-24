@@ -21,8 +21,8 @@
         </v-col>
       </v-row>
       <ProfileForm
-        :allCoursesCode="allCoursesCode"
-        :allDisciplines="allDisciplines"
+        :allCoursesCode="backendData.allCoursesCode"
+        :allDisciplines="backendData.allDisciplines"
         v-model="profileData"
       />
       <v-row>
@@ -31,7 +31,10 @@
           <v-divider class="divider"></v-divider>
         </v-col>
       </v-row>
-      <InterestsForm :allDepartments="allDepartments" v-model="interestsData" />
+      <InterestsForm
+        :allDepartments="backendData.allDepartments"
+        v-model="interestsData"
+      />
     </v-form>
     <v-row justify="center">
       <v-btn
@@ -46,16 +49,17 @@
 </template>
 
 <script>
-import saveDataInStorage from '@/services/Storage.js';
+import {
+  saveDataInStorage,
+  getComputedDataFromStorage,
+} from '@/services/Storage.js';
 import validateFields from '@/services/Validate.js';
 import ProfileForm from '../components/ProfileForm.vue';
 import InterestsForm from '../components/InterestsForm.vue';
+import { getAllFormDataFromBackend } from '../services/Request.js';
 
 export default {
   data: () => ({
-    allDisciplines: [],
-    allDepartments: [],
-    allCoursesCode: [],
     profileData: {
       name: '',
       courseCode: '',
@@ -65,6 +69,11 @@ export default {
       keywords: [],
       departments: [],
     },
+    backendData: {
+      allCoursesCode: [],
+      allDisciplines: [],
+      allDepartments: [],
+    },
     errors: [],
   }),
   components: {
@@ -72,11 +81,24 @@ export default {
     InterestsForm,
   },
   mounted() {
-    this.getAllCoursesCode();
-    this.getAllDisciplines();
-    this.getAllDepartments();
+    this.userData = getComputedDataFromStorage(localStorage);
+    this.fetchBackendData();
   },
   methods: {
+    async fetchBackendData() {
+      const allDisciplines =
+        (await getAllFormDataFromBackend('/disciplines')) || [];
+      const allDepartments =
+        (await getAllFormDataFromBackend('/departments')) || [];
+      const allCoursesCode =
+        (await getAllFormDataFromBackend('/requisites/courses'))?.sort() || [];
+
+      this.backendData = {
+        allDisciplines,
+        allDepartments,
+        allCoursesCode,
+      };
+    },
     submit() {
       const { isValid, errors } = validateFields(
         {
@@ -101,21 +123,6 @@ export default {
       } else {
         this.errors = errors;
       }
-    },
-    async getAllDisciplines() {
-      const url = process.env.BACKEND_URL || 'http://localhost:8080';
-      const response = await fetch(url + '/disciplines');
-      this.allDisciplines = await response.json();
-    },
-    async getAllDepartments() {
-      const url = process.env.BACKEND_URL || 'http://localhost:8080';
-      const response = await fetch(url + '/departments');
-      this.allDepartments = await response.json();
-    },
-    async getAllCoursesCode() {
-      const url = process.env.BACKEND_URL || 'http://localhost:8080';
-      const response = await fetch(url + '/requisites/courses');
-      this.allCoursesCode = (await response.json()).sort();
     },
   },
 };

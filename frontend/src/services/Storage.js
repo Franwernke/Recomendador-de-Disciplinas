@@ -8,7 +8,19 @@ export function getDataFromStorage(storage) {
   };
 }
 
-export default function saveDataInStorage(storage, payload, type = 'full') {
+export function getComputedDataFromStorage(storage) {
+  return {
+    name: JSON.parse(storage.getItem('name')) || '',
+    keywords: JSON.parse(storage.getItem('keywords')) || [],
+    courseCode: JSON.parse(storage.getItem('courseCode')) || '',
+    disciplines:
+      getComputedObjects(JSON.parse(storage.getItem('disciplines'))) || [],
+    departments:
+      getComputedObjects(JSON.parse(storage.getItem('departments'))) || [],
+  };
+}
+
+export function saveDataInStorage(storage, payload, type = 'full') {
   const { userData, backendData } = payload;
   let { name, courseCode, disciplines, departments, keywords } = userData;
 
@@ -40,6 +52,10 @@ export default function saveDataInStorage(storage, payload, type = 'full') {
   });
 
   return [];
+}
+
+function getComputedObjects(objects) {
+  return objects?.map((obj) => `${obj.code} - ${obj.name}`);
 }
 
 function getFullObject(allObjects, selecteds) {

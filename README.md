@@ -127,7 +127,13 @@ Para a parte da visualização, fizemos um painel que, ao ser aberto, executa es
 
 ## Fase 3
 
-_Em progresso..._
+Nesta terceira fase, trabalhamos no frontend e no backend.
+
+Requisito 5) Para este requisito, implementamos uma nova rota no backend que recebe quais são os departamentos de interesse, os tópicos de interesse, as disciplinas já cursadas e o código do curso do usuário, retornando uma lista de disciplinas recomendadas que são possíveis de serem feitas por aquele usuário. Cada disciplina pode possuir pré-requisitos diferentes para cursos diferentes, portanto, utilizamos o código do curso do usuário para conseguir achar os pré-requisitos que melhor correspondem a sua situação com base na estrutura dos dados apresentado na fase anterior. O backend faz um processamento para que somente uma instância da classe `RequisiteByCourse` esteja associado a cada disciplina recomendada. A estratégia utilizada para selecionar está instância é:
+- Se o curso do usuário possui pré-requisitos específicos, então estes são usados para avaliar a possibilidade do usuário cursar a disciplina.
+- Caso contrário, a primeira opção da lista de instâncias associada à disciplina é escolhida.
+
+No frontend realizamos a alteração no formulário para pedir o código do curso do usuário e implementamos a visualização do grafo utilizando a biblioteca [force-graph](https://github.com/vasturiano/force-graph).
 
 ## Fase 4
 

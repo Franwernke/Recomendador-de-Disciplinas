@@ -15,3 +15,14 @@ export async function fetchDataFromBackend(path, body) {
   }
   return null;
 }
+
+export async function getAllFormDataFromBackend(path) {
+  const url = process.env.BACKEND_URL || 'http://localhost:8080';
+
+  const response = await fetch(url + path);
+
+  if (response.status === 200) {
+    return await response.json();
+  }
+  return null;
+}
